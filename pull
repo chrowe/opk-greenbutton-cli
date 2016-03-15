@@ -11,6 +11,9 @@ read USER
 echo -n "Password: "
 read -s PASS
 
-curl --user "$USER:$PASS" "https://api.greenmountainpower.com/api/v2/usage/"$ACCOUNT"/download?startDate=2016-03-13T00:00:00-04:00&endDate=2016-03-14T00:00:00-04:00&format=xml" > data.xml
+TODAY=$(date +"%Y-%m-%dT%H:%M:%S")
+YESTERDAY=$(date -v-1d +"%Y-%m-%dT%H:%M:%S")
+
+curl --user "$USER:$PASS" "https://api.greenmountainpower.com/api/v2/usage/"$ACCOUNT"/download?startDate="$YESTERDAY"-04:00&endDate="$TODAY"-04:00&format=xml" > data.xml
 
 cat data.xml | xpath '/feed/entry/content/espi:IntervalBlock/espi:IntervalReading[last()]/espi:value/text()'
