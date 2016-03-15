@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Greenbutton provides electical usage in Watt hours https://www.naesb.org//misc/espi.xsd
+
+echo -n "Account #: "
+read ACCOUNT
+
+echo -n "Username: "
+read USER
+
+echo -n "Password: "
+read -s PASS
+
+curl --user "$USER:$PASS" "https://api.greenmountainpower.com/api/v2/usage/"$ACCOUNT"/download?startDate=2016-03-13T00:00:00-04:00&endDate=2016-03-14T00:00:00-04:00&format=xml" > data.xml
+
+cat data.xml | xpath '/feed/entry/content/espi:IntervalBlock/espi:IntervalReading[last()]/espi:value/text()'
